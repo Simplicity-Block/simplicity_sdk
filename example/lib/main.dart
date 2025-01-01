@@ -79,13 +79,13 @@ contract token with name, symbol, total_supply does
   Future<void> deployWalletContract() async {
     try {
       setState(() => outputText = 'Deploying wallet contract...');
-      
+
       final result = await sdk.deployContract(
         privateKey: privateKeyController.text,
         contractName: 'MyWallet',
         contractCode: walletContract,
       );
-      
+
       setState(() {
         deployedContractAddress = result.contractAddress;
         outputText = '''
@@ -107,14 +107,14 @@ Transaction: ${result.transactionHash}''';
 
     try {
       setState(() => outputText = 'Making deposit...');
-      
+
       final result = await sdk.callContract(
         privateKey: privateKeyController.text,
         contractAddress: deployedContractAddress!,
         functionName: 'deposit',
         parameters: {'amount': 100},
       );
-      
+
       setState(() => outputText = '''
 Deposit successful!
 New balance: ${result.result}
@@ -128,13 +128,13 @@ New balance: ${result.result}
   Future<void> deployTokenContract() async {
     try {
       setState(() => outputText = 'Deploying token contract...');
-      
+
       final result = await sdk.deployContract(
         privateKey: privateKeyController.text,
         contractName: 'MyToken',
         contractCode: tokenContract,
       );
-      
+
       setState(() {
         deployedContractAddress = result.contractAddress;
         outputText = '''
@@ -156,14 +156,14 @@ Transaction: ${result.transactionHash}''';
 
     try {
       setState(() => outputText = 'Minting tokens...');
-      
+
       final result = await sdk.callContract(
         privateKey: privateKeyController.text,
         contractAddress: deployedContractAddress!,
         functionName: 'mint',
         parameters: {'amount': 1000},
       );
-      
+
       setState(() => outputText = '''
 Tokens minted successfully!
 New supply: ${result.result}
@@ -192,9 +192,8 @@ New supply: ${result.result}
               ),
             ),
             const SizedBox(height: 16),
-            const Text('Wallet Contract Examples:', 
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
-            ),
+            const Text('Wallet Contract Examples:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -214,9 +213,8 @@ New supply: ${result.result}
               ],
             ),
             const SizedBox(height: 16),
-            const Text('Token Contract Examples:', 
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
-            ),
+            const Text('Token Contract Examples:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -236,9 +234,8 @@ New supply: ${result.result}
               ],
             ),
             const SizedBox(height: 16),
-            const Text('Output:', 
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
-            ),
+            const Text('Output:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Expanded(
               child: Container(

@@ -6,12 +6,13 @@ class SmartContractSDK {
   final String _ecdsaServerUrl;
   final String _contractServerUrl;
   String? _publicKey;
-  
+
   SmartContractSDK({
     String? ecdsaServerUrl,
     String? contractServerUrl,
-  }) : _ecdsaServerUrl = ecdsaServerUrl ?? 'https://ecdsa-server.onrender.com',
-       _contractServerUrl = contractServerUrl ?? 'https://simplicity-server.onrender.com';
+  })  : _ecdsaServerUrl = ecdsaServerUrl ?? 'https://ecdsa-server.onrender.com',
+        _contractServerUrl =
+            contractServerUrl ?? 'https://simplicity-server.onrender.com';
 
   Future<String> getPublicKey(String privateKey) async {
     try {
@@ -28,17 +29,19 @@ class SmartContractSDK {
         _publicKey = data['public_key'];
         return _publicKey!;
       } else {
-        throw SmartContractException('Failed to get public key: ${response.body}');
+        throw SmartContractException(
+            'Failed to get public key: ${response.body}');
       }
     } catch (e) {
       throw SmartContractException('Error getting public key: $e');
     }
   }
 
-  Future<String?> _signPayload(String privateKey, Map<String, dynamic> payload) async {
+  Future<String?> _signPayload(
+      String privateKey, Map<String, dynamic> payload) async {
     try {
       final serializablePayload = Map<String, dynamic>.from(payload);
-      
+
       final response = await http.post(
         Uri.parse('$_ecdsaServerUrl/sign_payload'),
         headers: {'Content-Type': 'application/json'},
@@ -52,7 +55,8 @@ class SmartContractSDK {
         final data = json.decode(response.body);
         return data['signed_payload'];
       } else {
-        throw SmartContractException('Failed to sign payload: ${response.body}');
+        throw SmartContractException(
+            'Failed to sign payload: ${response.body}');
       }
     } catch (e) {
       throw SmartContractException('Error signing payload: $e');
@@ -90,27 +94,26 @@ class SmartContractSDK {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(deploymentData),
       );
-  // Regular Expression to extract only the contract address
+      // Regular Expression to extract only the contract address
 
       if (response.statusCode == 201) {
         final data = response.body;
-          RegExp regex = RegExp(r'(?<=Contract address is\s)[a-f0-9]+');
-  
-  // Search for the contract address in the message
-  Match? match = regex.firstMatch(data);
-  
-  if (match != null) {
-    String _contractAddress = match.group(0)!;
-     return DeploymentResult(
-          contractAddress: _contractAddress,
-          transactionHash: _contractAddress
-        );
-  } else {
-    throw SmartContractException('No contract address found.');
-  }
-       
+        RegExp regex = RegExp(r'(?<=Contract address is\s)[a-f0-9]+');
+
+        // Search for the contract address in the message
+        Match? match = regex.firstMatch(data);
+
+        if (match != null) {
+          String _contractAddress = match.group(0)!;
+          return DeploymentResult(
+              contractAddress: _contractAddress,
+              transactionHash: _contractAddress);
+        } else {
+          throw SmartContractException('No contract address found.');
+        }
       } else {
-        throw SmartContractException('Failed to deploy contract: ${response.body}');
+        throw SmartContractException(
+            'Failed to deploy contract: ${response.body}');
       }
     } catch (e) {
       throw SmartContractException('Error deploying contract: $e');
